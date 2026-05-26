@@ -13,21 +13,36 @@ Codex skill for converting course/book folders into WeRead-friendly EPUB files.
 
 ## Install
 
-Clone or download this repository into your Codex skills directory:
+Clone or download this repository into your Codex skills directory.
 
 ### Windows PowerShell
+
+```powershell
+iwr https://raw.githubusercontent.com/xingyun7842/-/main/install.ps1 -OutFile install.ps1
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+Manual install:
 
 ```powershell
 $SkillDir = "$env:USERPROFILE\.codex\skills\weread-optimizer"
 New-Item -ItemType Directory -Force -Path (Split-Path $SkillDir) | Out-Null
 git clone https://github.com/xingyun7842/-.git $SkillDir
+python -m pip install -r "$SkillDir\requirements.txt"
 ```
 
 ### macOS / Linux
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/xingyun7842/-/main/install.sh | bash
+```
+
+Manual install:
+
+```bash
 mkdir -p "$HOME/.codex/skills"
 git clone https://github.com/xingyun7842/-.git "$HOME/.codex/skills/weread-optimizer"
+python3 -m pip install -r "$HOME/.codex/skills/weread-optimizer/requirements.txt"
 ```
 
 ## Usage
