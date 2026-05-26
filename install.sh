@@ -17,4 +17,12 @@ else
   git clone "$repo" "$skill_dir"
 fi
 
+if command -v python3 >/dev/null 2>&1; then
+  python3 -m pip install -r "$skill_dir/requirements.txt"
+elif command -v python >/dev/null 2>&1; then
+  python -m pip install -r "$skill_dir/requirements.txt"
+else
+  echo "Python was not found. Install Python, then run: python -m pip install -r $skill_dir/requirements.txt" >&2
+fi
+
 echo "Installed weread-optimizer"
