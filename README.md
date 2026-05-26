@@ -4,12 +4,12 @@ Codex skill for converting course/book folders into WeRead-friendly EPUB files.
 
 ## What It Does
 
-- Converts HTML, PDF, DOCX, TXT, MOBI, images, and PPT/PPTX into EPUB.
-- Optimizes HTML exports for WeRead by extracting readable content blocks instead of dumping full webpages.
-- Preserves headings, paragraphs, lists, code blocks, links, tables, comparison grids, blockquotes, and body images.
+- Converts HTML, PDF, TXT, and image files into EPUB.
+- Combines ordered HTML files into one EPUB collection for WeRead.
+- Optimizes HTML exports by extracting readable content blocks instead of dumping full webpages.
+- Preserves headings, paragraphs, lists, code blocks, links, tables, comparison grids, blockquotes, and body images where extractable.
 - Converts div-based pseudo tables and comparison grids into EPUB-friendly tables.
-- Removes common web noise such as scripts, navigation, buttons, comments, sidebars, and next-chapter cards.
-- Keeps interactive media notes for video/audio/iframe content because EPUB cannot embed those interactions reliably.
+- Keeps notes for video/audio/iframe content because EPUB cannot embed those interactions reliably.
 
 ## Install
 
@@ -54,6 +54,8 @@ Useful environment variables:
 
 ## Notes
 
-- PPT/PPTX conversion on Windows can use PowerPoint COM when PowerPoint is installed.
-- Cloud/Linux environments can use the HTML/PDF/DOCX/TXT/image paths, but usually cannot use Windows PowerPoint COM.
+- PDF conversion requires `pymupdf`.
+- HTML extraction works best with `beautifulsoup4`.
+- Image dimension detection uses `Pillow` when available.
+- DOCX/MOBI/PPT should be converted to HTML/PDF first, or handled by a richer local workflow.
 - For very large image-heavy EPUBs, compress images before uploading to WeRead to avoid web import timeouts.
