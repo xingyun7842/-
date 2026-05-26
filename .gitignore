@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+微信读书优化输出/
+*_work_images/
+_converted_pdf/
