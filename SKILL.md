@@ -39,6 +39,49 @@ python -X utf8 scripts/weread_optimize.py
 
 The script sorts numbered files by leading number, creates one EPUB, and inserts a visible chapter title at the start of every chapter body.
 
+## Full-image PDF Export
+
+Use this when the user asks for a PDF version of a generated EPUB, especially when they explicitly want images preserved.
+
+Do not use direct PyMuPDF `convert_to_pdf()` on EPUB as the final answer for image-heavy books. It can keep text but replace body images with `[image]` placeholders. For full-fidelity PDFs:
+
+1. Start from the full-image EPUB, not an audio-first/no-image EPUB.
+2. Generate a printable HTML bundle:
+
+```powershell
+python -X utf8 scripts/epub_to_pdf_html.py <book.epub> --work-dir <work-dir> --html <work-dir>\combined-print.html
+```
+
+3. Split the printable HTML into front matter plus one HTML file per chapter:
+
+```powershell
+python -X utf8 scripts/split_pdf_html.py <work-dir>\combined-print.html --out-dir <work-dir>\split-html
+```
+
+4. Render each split HTML file to PDF with a real browser print engine. Use Chromium/Chrome through Playwright or the available browser automation. Wait for `document.fonts.ready` and for every `document.images` entry to load before printing. Keep print CSS that wraps code blocks:
+
+```css
+pre, code { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; }
+pre { overflow: visible; max-height: none; break-inside: auto; }
+img { max-width: 100%; height: auto; object-fit: contain; }
+```
+
+5. Merge the split PDFs and produce a validation report:
+
+```powershell
+python -X utf8 scripts/merge_pdf_parts.py <work-dir>\split-pdf --output <output.pdf>
+```
+
+6. Validate before reporting success:
+   - all expected chapter PDFs were merged
+   - page count is non-zero and reasonable for the source
+   - image references are present; an image-heavy source should not produce a tiny text-only PDF
+   - all chapter titles can be found in extracted PDF text
+   - representative code/pre blocks from the source HTML can be found in the PDF text
+   - user-sensitive text such as table labels, headings, and code snippets is searchable
+
+If browser rendering an entire book hangs, split by chapter before printing. Never silently switch to an image-only PDF for text/table/code content unless the user explicitly approves it, because voice playback and search will suffer.
+
 ## Required First Steps
 
 1. Count source files and extensions in the current folder.
